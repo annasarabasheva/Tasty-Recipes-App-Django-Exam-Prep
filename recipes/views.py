@@ -2,10 +2,15 @@ from django.shortcuts import render, redirect
 
 from profiles.models import Profile
 from recipes.forms import RecipeCreateForm
+from recipes.models import Recipe
 
 
 def catalogue(request):
-    return render(request, 'recipes/catalogue.html')
+    all_recipes = Recipe.objects.all()
+    context = {
+        "all_recipes": all_recipes
+    }
+    return render(request, 'recipes/catalogue.html', context)
 
 
 def create_recipe(request):
