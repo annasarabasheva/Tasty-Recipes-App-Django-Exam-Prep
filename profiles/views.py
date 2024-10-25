@@ -6,6 +6,10 @@ from profiles.models import Profile
 
 def create_profile(request):
     form = ProfileCreateForm(request.POST or None)
+    profile = Profile.objects.first()
+
+    if profile:  # Plays the role of a guard so that noone can manually type the path in the url
+        return redirect('home')
 
     if request.method == 'POST':
         if form.is_valid():
@@ -13,7 +17,8 @@ def create_profile(request):
             return redirect('catalogue')
 
     context = {
-        "form": form
+        "form": form,
+        "profile": profile
     }
 
     return render(request, 'profiles/create-profile.html', context)
@@ -21,6 +26,10 @@ def create_profile(request):
 
 def details_profile(request):
     profile = Profile.objects.first()
+
+    if not profile:  # Plays the role of a guard so that noone can manually type the path in the url
+        return redirect('home')
+
     context = {
         "profile": profile
     }
@@ -31,13 +40,17 @@ def edit_profile(request):
     profile = Profile.objects.first()
     form = ProfileEditForm(request.POST or None, instance=profile)
 
+    if not profile:  # Plays the role of a guard so that noone can manually type the path in the url
+        return redirect('home')
+
     if request.method == "POST":
         if form.is_valid():
             form.save()
             return redirect('details-profile')
 
     context = {
-        "form": form
+        "form": form,
+        "profile": profile
     }
 
     return render(request, 'profiles/edit-profile.html', context)
@@ -46,7 +59,14 @@ def edit_profile(request):
 def delete_profile(request):
     profile = Profile.objects.first()
 
+    if not profile:  # Plays the role of a guard so that noone can manually type the path in the url
+        return redirect('home')
+
     if request.method == 'POST':
         profile.delete()
         return redirect('home')
-    return render(request, 'profiles/delete-profile.html')
+
+    context ={
+        "profile": profile
+    }
+    return render(request, 'profiles/delete-profile.html', context)

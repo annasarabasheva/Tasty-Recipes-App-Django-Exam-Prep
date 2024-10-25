@@ -10,7 +10,17 @@ class RecipeBaseForm(forms.ModelForm):
 
 
 class RecipeCreateForm(RecipeBaseForm):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['ingredients'].help_text = "Ingredients must be separated by a comma and space."
+        self.fields['ingredients'].widget.attrs['placeholder'] = "ingredient1, ingredient2, ..."
+
+        self.fields['instructions'].widget.attrs['placeholder'] = "Enter detailed instructions here..."
+
+        self.fields['cooking_time'].help_text = "Provide the cooking time in minutes."
+
+        self.fields['image_url'].widget.attrs['placeholder'] = "Optional image URL here..."
 
 
 class RecipeEditForm(RecipeBaseForm):
