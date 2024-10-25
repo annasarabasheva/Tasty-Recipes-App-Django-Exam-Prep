@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 from profiles.models import Profile
-from recipes.forms import RecipeCreateForm
+from recipes.forms import RecipeCreateForm, RecipeEditForm, RecipeDeleteForm
 from recipes.models import Recipe
 
 
@@ -41,8 +41,30 @@ def details_recipe(request, recipe_id):
 
 
 def edit_recipe(request, recipe_id):
-    pass
+    recipe = Recipe.objects.get(id=recipe_id)
+    form = RecipeEditForm(request.POST or None, instance=recipe)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('catalogue')
+
+    context = {
+        "form": form
+    }
+    return render(request, 'recipes/edit-recipe.html', context)
 
 
 def delete_recipe(request, recipe_id):
-    pass
+    recipe = Recipe.objects.get(id=recipe_id)
+    form = RecipeDeleteForm(request.POST or None, instance=recipe)
+
+    if request.method == 'POST':
+        recipe.delete()
+        return redirect('catalogue')
+
+    context = {
+        "form": form
+    }
+
+    return render(request, 'recipes/delete-recipe.html', context)
