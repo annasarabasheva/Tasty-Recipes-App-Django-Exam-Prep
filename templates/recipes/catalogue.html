@@ -34,7 +34,7 @@
           <h1>{{ recipe.instructions|slice:":35"}}</h1>
           <div class="details-buttons">
             <!-- recipe details button -->
-            <a href="" class="details-btn">Details</a>
+            <a href="{% url 'details-recipe' recipe.pk%}" class="details-btn">Details</a>
           </div>
         </div>
       {% endfor %}

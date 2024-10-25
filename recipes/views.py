@@ -31,4 +31,18 @@ def create_recipe(request):
     return render(request, 'recipes/create-recipe.html', context)
 
 
+def details_recipe(request, recipe_id):
+    recipe = Recipe.objects.get(id=recipe_id)
 
+    context = {
+        "recipe": recipe
+    }
+    return render(request, 'recipes/details-recipe.html', context)
+
+
+def edit_recipe(request, recipe_id):
+    pass
+
+
+def delete_recipe(request, recipe_id):
+    pass
